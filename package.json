@@ -1,0 +1,11 @@
+{
+  "name": "modular-litigation-starter",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "lint:boundaries": "npm --prefix backend run lint:boundaries",
+    "new:module": "node scripts/new-module.mjs"
+  }
+}

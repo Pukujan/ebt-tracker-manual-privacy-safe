@@ -1,0 +1,16 @@
+{
+  "name": "modular-litigation-starter-backend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/core/server.js",
+    "start": "node src/core/server.js",
+    "lint:boundaries": "node scripts/check-module-boundaries.mjs"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
