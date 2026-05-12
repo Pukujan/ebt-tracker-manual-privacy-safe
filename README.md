@@ -4,6 +4,10 @@ A clean starter repo using the same modular-monolith architecture pattern as you
 
 You can add new modules safely without rewriting app core.
 
+**Documentation:** see [docs/README.md](./docs/README.md) for the starter overview and [docs/architecture/ARCHITECTURE_GUARDRAILS.md](./docs/architecture/ARCHITECTURE_GUARDRAILS.md) for module contracts and enforcement.
+
+**Repository:** [https://github.com/Pukujan/litigation-workflow-application](https://github.com/Pukujan/litigation-workflow-application)
+
 ## What is included
 
 - Backend module auto-loader (`backend/src/core/module-loader.js`)
