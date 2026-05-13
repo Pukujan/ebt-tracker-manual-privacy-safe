@@ -6,7 +6,7 @@ You can add new modules safely without rewriting app core.
 
 **Documentation:** see [docs/README.md](./docs/README.md) for the starter overview and [docs/architecture/ARCHITECTURE_GUARDRAILS.md](./docs/architecture/ARCHITECTURE_GUARDRAILS.md) for module contracts and enforcement.
 
-**Repository:** [https://github.com/Pukujan/litigation-workflow-application](https://github.com/Pukujan/litigation-workflow-application)
+**Repository:** [https://github.com/Pukujan/ebt-tracker-manual-privacy-safe](https://github.com/Pukujan/ebt-tracker-manual-privacy-safe)
 
 ## What is included
 

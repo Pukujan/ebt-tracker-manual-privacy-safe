@@ -8,12 +8,12 @@ The goal is to grow a litigation workflow application safely: each module owns i
 
 Source of truth for this codebase:
 
-- [https://github.com/Pukujan/litigation-workflow-application](https://github.com/Pukujan/litigation-workflow-application)
+- [https://github.com/Pukujan/ebt-tracker-manual-privacy-safe](https://github.com/Pukujan/ebt-tracker-manual-privacy-safe)
 
 Clone with:
 
 ```bash
-git clone https://github.com/Pukujan/litigation-workflow-application.git
+git clone https://github.com/Pukujan/ebt-tracker-manual-privacy-safe.git
 ```
 
 ## What is included
@@ -59,6 +59,18 @@ cd frontend && npm install && npm run dev
 ```
 
 Root `package.json` also exposes `npm run dev:backend` and `npm run dev:frontend`.
+
+## Environment variables (backend)
+
+Create `backend/.env` (gitignored). A committed template lives at [`backend/.env.example`](../backend/.env.example).
+
+This repo keeps only the **API essentials** you asked for:
+
+- **`POSTGRES_URL`** — Neon Postgres connection string  
+- **`OPENROUTER_API_KEY`** and **`LLM_BASE_URL`** — OpenRouter (`https://openrouter.ai/api/v1` by default)  
+- **`PORT`** — HTTP port for the Express server (defaults to `3001` if unset)
+
+The starter server currently reads **`PORT`** only; Neon and OpenRouter variables are ready for modules and shared code you add next.
 
 ## Create a module
 

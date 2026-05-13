@@ -5,6 +5,7 @@ npm-debug.log*
 # Env
 .env
 .env.*
+!.env.example
 
 # Build outputs
 frontend/dist/
