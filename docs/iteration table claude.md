@@ -3,43 +3,179 @@ Date: 05/13/2026
 
 ---
 
-## Iteration Map
+## Chart 1 — Iteration Flow (what changed and why)
 
 ```mermaid
 flowchart TD
-    A["ChatGPT v1\nReview-first dashboard\nGeneric case table"] -->|Wrong priority| B["Spec Review\nIdentified UX inversion:\nAI review was dominating\nEBT ops buried"]
+    A["❌ Wrong start\nAI review dominated\n18-col generic table"]
+    B["Spec rewrite\nEBT ops first\nReview secondary"]
+    C["⚠️ Data reality\nInput is free-text synopsis\nNot structured fields\nBuild frontend first"]
+    D["⚠️ Workflow insight\nOPA dates are a\nnegotiation cycle\nnot a one-time offer"]
+    E["Simplify main table\nShow last reply date only\nFull log on expand"]
+    F["✅ Final layout\nRow 1: Case + Witness + Dates\nRow 2: OPA last reply tiles\nExpand: full date log"]
 
-    B --> C["Spec Written\n18-col table · 6 tabs\nOne row per EBT obligation\nHuman review secondary"]
-
-    C -->|Built demo| D["Demo v1\nToo many columns\nDate badges present but\nOPA availability missing\nEmail btn buried in dropdown"]
-
-    D -->|User feedback| E["Scope Correction\nMain table trimmed:\nOnly last FL/UP + OPA dates matter\nBusted/OOB dates → case detail only\nRemaining EBTs → inline mini-table"]
-
-    E -->|Built demo| F["Demo v2\n1 col per OPA · date badges\n18 cols → 6 cols\nExpand row = mini EBT table"]
-
-    F -->|User clarified data model| G["Data Reality Check\nData comes in as free-text synopsis\nNot pre-structured\nFrontend-first decision made:\nHardcode mock data, build pipeline later"]
-
-    G --> H["Multi-OPA Problem\nUp to 7 defense counsel per case\nEach OPA has 2–7 date offers\nAll must be visible simultaneously"]
-
-    H -->|Mockup| I["Mockup v1\nOPA as dynamic columns\nLatest dates shown per OPA\nExpand = per-OPA log side by side"]
-
-    I -->|User corrected workflow| J["Negotiation Cycle Insight\nDates aren't just availability offers\nIt's a cycling negotiation:\nOffer → no overlap → ask again\nEach reply creates a log entry"]
-
-    J -->|Mockup| K["Mockup v2\nRound labels per OPA\nOverlap auto-calculated\nPossible Dates = 2+ OPA agree\nFirm Date = all confirm"]
-
-    K -->|Simplify main table| L["Simplification Decision\nMain table: last FL/UP email date only\nExpand: all offered dates per OPA\nDon't overload the visible row"]
-
-    L -->|Mockup| M["Mockup v3\nOPA tiles show last reply date\n✓ responded / ✗ no response\nExpand = full date log per OPA"]
-
-    M -->|Layout corrections| N["Layout Corrections\n• Witness gets own cell before OOB\n• OOB tied to witness — clicking opens witness list\n• Row 2 labeled 'Last reply:'\n• 2-row-per-case layout"]
-
-    N -->|Final mockup| O["Mockup v4 ✓\nRow 1: Case / Witness / OOB / FL·UP / Possible / Firm\nRow 2: Last reply per OPA tiles\nWitness click → all witnesses + OOB dropdown\nExpand → full OPA date log"]
+    A --> B --> C --> D --> E --> F
 
     style A fill:#FCEBEB,stroke:#F09595,color:#791F1F
-    style O fill:#EAF3DE,stroke:#97C459,color:#27500A
-    style G fill:#FAEEDA,stroke:#EF9F27,color:#633806
-    style J fill:#FAEEDA,stroke:#EF9F27,color:#633806
-    style L fill:#EEEDFE,stroke:#AFA9EC,color:#3C3489
+    style C fill:#FAEEDA,stroke:#EF9F27,color:#633806
+    style D fill:#FAEEDA,stroke:#EF9F27,color:#633806
+    style F fill:#EAF3DE,stroke:#97C459,color:#27500A
+```
+
+---
+
+## Chart 2 — UX Priority Before vs After
+
+```mermaid
+flowchart LR
+    subgraph BEFORE["❌ Before"]
+        direction TB
+        P1["1. AI Review Status"]
+        P2["2. Case Table"]
+        P3["3. EBT Dates"]
+        P4["4. OPA Availability"]
+        P5["5. Follow-Up"]
+        P1 --> P2 --> P3 --> P4 --> P5
+    end
+
+    subgraph AFTER["✅ After"]
+        direction TB
+        Q1["1. Last FL/UP Date"]
+        Q2["2. OPA Last Reply"]
+        Q3["3. Witness + OOB"]
+        Q4["4. Possible Dates"]
+        Q5["5. Firm Date"]
+        Q6["6. AI Review"]
+        Q1 --> Q2 --> Q3 --> Q4 --> Q5 --> Q6
+    end
+
+    BEFORE -->|"redesign"| AFTER
+
+    style BEFORE fill:#FCEBEB,stroke:#F09595
+    style AFTER fill:#EAF3DE,stroke:#97C459
+```
+
+---
+
+## Chart 3 — OPA Negotiation Cycle (the core workflow)
+
+```mermaid
+sequenceDiagram
+    participant US as Us (PB/Staff)
+    participant A as OPA A
+    participant B as OPA B
+    participant C as OPA C
+
+    US->>A: Request availability
+    US->>B: Request availability
+    US->>C: Request availability
+
+    A-->>US: Offers Jun 15, Jun 20
+    B-->>US: Offers Jun 22, Jun 25
+    C-->>US: No response
+
+    Note over US: No overlap found
+
+    US->>A: Can you do Jun 22?
+    US->>B: Can you do Jun 22?
+    US->>C: Follow-up — any dates?
+
+    A-->>US: Yes, Jun 22 works
+    B-->>US: Yes, Jun 22 works
+    C-->>US: No response ⚠️
+
+    Note over US: Jun 22 = Possible Date
+    Note over C: Escalate — no response
+
+    US->>C: Second follow-up
+    C-->>US: Jun 22 works
+
+    Note over US,C: ✅ Jun 22 = Firm Date
+```
+
+---
+
+## Chart 4 — Table Information Hierarchy
+
+```mermaid
+flowchart TD
+    ROW["Case Row"]
+    ROW --> R1["Row 1 — always visible"]
+    ROW --> R2["Row 2 — always visible"]
+    ROW --> R3["Expanded — click to open"]
+
+    R1 --> C1["Case name"]
+    R1 --> C2["Witness + status"]
+    R1 --> C3["OOB date"]
+    R1 --> C4["Last FL/UP"]
+    R1 --> C5["Possible dates"]
+    R1 --> C6["Firm date"]
+    R1 --> C7["Send FL/UP btn"]
+
+    R2 --> D1["OPA A — last reply date"]
+    R2 --> D2["OPA B — last reply date"]
+    R2 --> D3["OPA C — last reply date"]
+    R2 --> D4["... up to 7 OPAs"]
+
+    R3 --> E1["All dates OPA A offered"]
+    R3 --> E2["All dates OPA B offered"]
+    R3 --> E3["All dates OPA C offered"]
+    R3 --> E4["Oldest to newest per OPA"]
+
+    style R1 fill:#E6F1FB,stroke:#85B7EB,color:#0C447C
+    style R2 fill:#EEEDFE,stroke:#AFA9EC,color:#3C3489
+    style R3 fill:#F1EFE8,stroke:#B4B2A9,color:#5F5E5A
+```
+
+---
+
+## Chart 5 — What Belongs Where (cut decisions)
+
+```mermaid
+flowchart LR
+    DATA["Every data field"]
+
+    DATA --> MAIN["Main table\nRow 1 + Row 2"]
+    DATA --> EXPAND["Expand\non click"]
+    DATA --> DETAIL["Case detail\nView case only"]
+
+    MAIN --> M1["Last FL/UP date"]
+    MAIN --> M2["OPA last reply date"]
+    MAIN --> M3["Witness + OOB"]
+    MAIN --> M4["Possible dates"]
+    MAIN --> M5["Firm date"]
+
+    EXPAND --> E1["All OPA offered dates\nper round"]
+    EXPAND --> E2["All witnesses + OOB\nfor this case"]
+
+    DETAIL --> D1["Busted dates"]
+    DETAIL --> D2["Raw synopsis"]
+    DETAIL --> D3["Attorney details"]
+    DETAIL --> D4["Defendant info + emails"]
+    DETAIL --> D5["AI review status"]
+
+    style MAIN fill:#EAF3DE,stroke:#97C459,color:#27500A
+    style EXPAND fill:#EEEDFE,stroke:#AFA9EC,color:#3C3489
+    style DETAIL fill:#F1EFE8,stroke:#B4B2A9,color:#5F5E5A
+```
+
+---
+
+## Chart 6 — Build Order (what to do next)
+
+```mermaid
+flowchart TD
+    A["✅ Done\nUI mockups reviewed\nLayout confirmed"]
+    B["Next\nBuild full frontend demo\nAll 6 cases · mock data"]
+    C["Then\nBuild LLM extraction pipeline\nSynopsis → structured fields"]
+    D["Then\nConnect frontend to pipeline\nReplace mock data with real data"]
+    E["Later\nSend FL/UP drafting module\nButton already wired as placeholder"]
+
+    A --> B --> C --> D --> E
+
+    style A fill:#EAF3DE,stroke:#97C459,color:#27500A
+    style B fill:#E6F1FB,stroke:#85B7EB,color:#0C447C
+    style E fill:#F1EFE8,stroke:#B4B2A9,color:#5F5E5A
 ```
 
 ---
